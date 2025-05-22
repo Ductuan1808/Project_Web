@@ -4,7 +4,7 @@ import com.example.demo.Connector.Connect;
 import com.example.demo.Entity.Categories_Entity;
 import com.example.demo.Entity.Product_Entity;
 import com.example.demo.Tien_Ich.Computer_DTO;
-import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +16,6 @@ import java.util.ArrayList;
 
 @Repository
 public class Computer_Repo implements Computer_interface{
-@Autowired
-    ModelMapper mapper;
 
     @Override
     public ArrayList<Product_Entity> FindComrepo(Computer_DTO Computer, String Cate_name) {
@@ -35,6 +33,10 @@ public class Computer_Repo implements Computer_interface{
         }
         if(Computer.getPrice_to()!=null){
             sql.append(" And c.price < "+Computer.getPrice_to()+" ");
+        }if(Cate_name!=""&&Cate_name!=null){
+            sql.append(" And categories.name = '"+ Cate_name+"' ");
+        }if(Computer.getName()!=null&&Computer.getName()!=""){
+            sql.append(" And c.name = '"+Computer.getName()+"' ");
         }
         try {
             Statement st = c.createStatement();
@@ -72,6 +74,7 @@ public class Computer_Repo implements Computer_interface{
             try {
                 Statement st= c.createStatement();
                 ResultSet rs =st.executeQuery(sql.toString());
+                if(rs.next()){
                 productEntity.setId(rs.getInt("id"));
                 productEntity.setCreate_at(rs.getTimestamp("created_at"));
                 productEntity.setQuantity(rs.getInt("quantity"));
@@ -82,6 +85,7 @@ public class Computer_Repo implements Computer_interface{
                 productEntity.setName(rs.getNString("name"));
                 productEntity.setImage_url(rs.getNString("image_url"));
                 productEntity.setDescription(rs.getNString("description"));
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

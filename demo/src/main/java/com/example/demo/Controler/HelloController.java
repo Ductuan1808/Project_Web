@@ -4,10 +4,7 @@ import com.example.demo.Entity.Product_Entity;
 import com.example.demo.Service.Computer_service;
 import com.example.demo.Tien_Ich.Computer_DTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -23,7 +20,7 @@ public class HelloController {
     }
 
     @GetMapping("/web_PC/{id}")
-    public Product_Entity chitietsanpham(@RequestParam Long id){
+    public Product_Entity chitietsanpham(@PathVariable Long id){
         return computerService.chitiet(id);
     }
 }
